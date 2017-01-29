@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import App from '../src/App';
 
-describe('New test', function () {
+describe('App', function () {
     it('renders without crashing', () => {
         mount(<App/>)
     });
