@@ -12,6 +12,11 @@ describe('column', () => {
         wrapper.find('.column').should.to.have.length(1);
     });
 
+    it('should render a column title', () => {
+        const wrapper = shallow(<Column title="column title"/>);
+        wrapper.find('.column__title').text().should.equal('column title');
+    });
+
     it('should render multiple cards', () => {
         const cards = [
             {title: 'title1', votes: 1},
