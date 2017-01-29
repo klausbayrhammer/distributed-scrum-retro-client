@@ -1,23 +1,18 @@
-import React, { Component } from 'react';
+import React  from 'react';
 
-export default class extends Component {
-    classNames() {
-        if(!this.props['created-by-me']) {
-            return "card"
-        }
-        return "card card--created-by-me"
+function classNames(createdByMe) {
+    if (!createdByMe) {
+        return "card"
     }
-
-    render() {
-        return (
-            <div className={this.classNames()}>
-                <div className="card__title">
-                    {this.props.title}
-                </div>
-                <div className="card__votes">
-                    {this.props.votes}
-                </div>
-            </div>
-        );
-    }
+    return "card card--created-by-me"
 }
+
+export default ({title, votes, createdByMe}) =>
+    <div className={classNames(createdByMe)}>
+        <div className="card__title">
+            {title}
+        </div>
+        <div className="card__votes">
+            {votes}
+        </div>
+    </div>
