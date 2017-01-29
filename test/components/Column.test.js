@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import Card from '../src/components/Card';
-import Column from '../src/components/Column';
+import Card from '../../src/components/Card';
+import Column from '../../src/components/Column';
 import chai from 'chai';
 
 chai.should();

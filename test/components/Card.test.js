@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Card from '../src/components/Card';
+import Card from '../../src/components/Card';
 import chai from 'chai';
 
 chai.should();
