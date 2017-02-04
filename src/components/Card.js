@@ -8,7 +8,7 @@ export default ({title, votes, createdByMe, id, deleteCard, addVote, removeVote}
         <div className="card__votes">
             {votes}
         </div>
-        <button className="card__delete" onClick={() => deleteCard(id)} />
-        <button className="card__add-vote" onClick={() => addVote(id)} />
-        <button className="card__remove-vote" onClick={() => removeVote(id)} />
+        <button className="card__delete" onClick={() => deleteCard(id)} >x</button>
+        <button className="card__add-vote" onClick={() => addVote(id)} >+</button>
+        <button className="card__remove-vote" onClick={() => removeVote(id)} >-</button>
     </li>

@@ -30,13 +30,14 @@ describe('column', () => {
     it('should render multiple cards', () => {
         const addVote = sinon.stub();
         const removeVote = sinon.stub();
+        const deleteCard = sinon.stub();
         const cards = [
             {title: 'title1', votes: 1},
             {title: 'title2', votes: 2, createdByMe: true}];
 
-        const wrapper = shallow(Column({cards, addVote, removeVote}));
+        const wrapper = shallow(Column({cards, addVote, removeVote, deleteCard}));
 
-        wrapper.find(Card).get(0).props.should.eql({title: 'title1', votes: 1, addVote, removeVote});
-        wrapper.find(Card).get(1).props.should.eql({title: 'title2', votes: 2, createdByMe: true, addVote, removeVote});
+        wrapper.find(Card).get(0).props.should.eql({title: 'title1', votes: 1, addVote, removeVote, deleteCard});
+        wrapper.find(Card).get(1).props.should.eql({title: 'title2', votes: 2, createdByMe: true, addVote, removeVote, deleteCard});
     });
 });

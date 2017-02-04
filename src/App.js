@@ -26,10 +26,16 @@ class App extends Component {
         )
         this.setState(Object.assign({}, this.state, {columns}));
     }
+    deleteCard(cardIdToDelete) {
+        const columns = this.state.columns.map(column => 
+            Object.assign({}, column, {cards: column.cards.filter(card => card.id !== cardIdToDelete)})
+        )
+        this.setState(Object.assign({}, this.state, {columns}));
+    }
     render() {
         return (
             <div className="App">
-                <Board columns={this.state.columns} createCard={this.createCard.bind(this)} addVote={this.addVote.bind(this)} removeVote={this.removeVote.bind(this)}/>
+                <Board columns={this.state.columns} createCard={this.createCard.bind(this)} deleteCard={this.deleteCard.bind(this)} addVote={this.addVote.bind(this)} removeVote={this.removeVote.bind(this)}/>
             </div>
         );
     }
