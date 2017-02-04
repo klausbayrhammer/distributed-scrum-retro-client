@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Board from './components/Board';
+import uuid from 'uuid-v4';
 
 class App extends Component {
     constructor() {
@@ -8,7 +9,8 @@ class App extends Component {
     }
 
     createCard({columnId, title}) {
-        const card = {title, id:1, votes:0, createdByMe:true};
+        console.log(uuid());
+        const card = {title, id:uuid(), votes:0, createdByMe:true};
         const columnWithNewlyAddedCard = column => Object.assign({}, column, {cards: [...column.cards, card]})
         const columns = this.state.columns.map(column => column.id !== columnId ? column : columnWithNewlyAddedCard(column));
         this.setState(Object.assign({}, this.state, {columns}));

@@ -12,13 +12,15 @@
     "enzyme": "^2.7.1",
     "jsdom": "^9.9.1",
     "mocha": "^3.2.0",
+    "mockery": "^2.0.0",
     "react-addons-test-utils": "^15.4.2",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0"
   },
   "dependencies": {
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "uuid-v4": "^0.1.0"
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive ./test",
