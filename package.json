@@ -21,7 +21,7 @@
     "react-dom": "^15.4.2"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive ./test/**/*.test.js",
+    "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive ./test",
     "webpack": "webpack --watch"
   }
 }
