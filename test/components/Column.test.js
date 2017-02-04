@@ -3,8 +3,12 @@ import {shallow} from 'enzyme';
 import Card from '../../src/components/Card';
 import Column from '../../src/components/Column';
 import chai from 'chai';
+import sinon from 'sinon';
+
+import sinonChai from 'sinon-chai';
 
 chai.should();
+chai.use(sinonChai);
 
 describe('column', () => {
     it('should render a column', () => {
@@ -15,6 +19,12 @@ describe('column', () => {
     it('should render a column title', () => {
         const wrapper = shallow(<Column title="column title"/>);
         wrapper.find('.column__title').text().should.equal('column title');
+    });
+    it('should be possible to create a new card', () => {
+        const createCard = sinon.stub();
+        const wrapper = shallow(Column({id:15, createCard}));
+        wrapper.find('.column__create-card').simulate('click');
+        createCard.should.have.been.calledWith({columnId: 15, title: 'sampleTitle'});
     });
 
     it('should render multiple cards', () => {
