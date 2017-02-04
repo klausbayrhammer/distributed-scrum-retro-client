@@ -9,28 +9,27 @@ class App extends Component {
 
     createCard({columnId, title}) {
         const card = {title, id:1, votes:0, createdByMe:true};
-        const columns = {columns: this.state.columns.map(column => {
-            if(column.id !== columnId) {
-                return column
-            }
-            return Object.assign({}, column, {cards: [...column.cards, card]})
-        })}
-        this.state = Object.assign({}, this.state, columns);
+        const columnWithNewlyAddedCard = column => Object.assign({}, column, {cards: [...column.cards, card]})
+        const columns = this.state.columns.map(column => column.id !== columnId ? column : columnWithNewlyAddedCard(column));
+        this.setState(Object.assign({}, this.state, {columns}));
     }
     addVote(cardIdToVote) {
-        this.state = Object.assign({}, this.state, {columns: this.state.columns.map(column => {
-            return Object.assign({}, column, {cards: column.cards.map(card => {
-                if(card.id !== cardIdToVote) {
-                    return card;
-                }
-                return Object.assign({}, card, {votes:card.votes+1})
-            })})
-        })})
+        this.updateVote(cardIdToVote, 1);
+    }
+    removeVote(cardIdToVote) {
+        this.updateVote(cardIdToVote, -1);
+    }
+    updateVote(cardIdToVote, increment) {
+        const cardWithAddedVote = card => Object.assign({}, card, {votes:card.votes + increment});
+        const columns = this.state.columns.map(column => 
+            Object.assign({}, column, {cards: column.cards.map(card => card.id !== cardIdToVote ? card : cardWithAddedVote(card))})
+        )
+        this.setState(Object.assign({}, this.state, {columns}));
     }
     render() {
         return (
             <div className="App">
-                <Board columns={this.state.columns} createCard={this.createCard.bind(this)} addVote={this.addVote.bind(this)}/>
+                <Board columns={this.state.columns} createCard={this.createCard.bind(this)} addVote={this.addVote.bind(this)} removeVote={this.removeVote.bind(this)}/>
             </div>
         );
     }

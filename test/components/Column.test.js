@@ -12,12 +12,12 @@ chai.use(sinonChai);
 
 describe('column', () => {
     it('should render a column', () => {
-        const wrapper = shallow(<Column />);
+        const wrapper = shallow(Column());
         wrapper.find('.column').should.to.have.length(1);
     });
 
     it('should render a column title', () => {
-        const wrapper = shallow(<Column title="column title"/>);
+        const wrapper = shallow(Column({title:"column title"}));
         wrapper.find('.column__title').text().should.equal('column title');
     });
     it('should be possible to create a new card', () => {
@@ -28,13 +28,15 @@ describe('column', () => {
     });
 
     it('should render multiple cards', () => {
+        const addVote = sinon.stub();
+        const removeVote = sinon.stub();
         const cards = [
             {title: 'title1', votes: 1},
             {title: 'title2', votes: 2, createdByMe: true}];
 
-        const wrapper = shallow(<Column cards={cards}/>);
+        const wrapper = shallow(Column({cards, addVote, removeVote}));
 
-        wrapper.find(Card).get(0).props.should.eql({title: 'title1', votes: 1});
-        wrapper.find(Card).get(1).props.should.eql({title: 'title2', votes: 2, createdByMe: true});
+        wrapper.find(Card).get(0).props.should.eql({title: 'title1', votes: 1, addVote, removeVote});
+        wrapper.find(Card).get(1).props.should.eql({title: 'title2', votes: 2, createdByMe: true, addVote, removeVote});
     });
 });
