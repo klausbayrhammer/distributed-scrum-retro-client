@@ -9,12 +9,13 @@ class App extends Component {
 
     createCard({columnId, title}) {
         const card = {title, id:1, votes:0, createdByMe:true};
-        this.state = Object.assign({}, this.state, {columns: this.state.columns.map(column => {
+        const columns = {columns: this.state.columns.map(column => {
             if(column.id !== columnId) {
                 return column
             }
             return Object.assign({}, column, {cards: [...column.cards, card]})
-        })})
+        })}
+        this.state = Object.assign({}, this.state, columns);
     }
     addVote(cardIdToVote) {
         this.state = Object.assign({}, this.state, {columns: this.state.columns.map(column => {
