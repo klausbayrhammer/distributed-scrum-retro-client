@@ -1,7 +1,7 @@
 import React from 'react'
 import Column from './Column'
 
-export default ({columns = [], createCard, addVote, removeVote, deleteCard} = {}) =>
+export default ({repository}) =>
     <div className="board">
-        {columns.map(column => <Column {...column} key={column.title} createCard={createCard} addVote={addVote} removeVote={removeVote} deleteCard={deleteCard}/>)}
+        {repository.columns.map((column, index) => <Column key={index} column={column} repository={repository} />)}
     </div>

@@ -8,23 +8,14 @@ import sinon from 'sinon';
 chai.should();
 
 describe('board', () => {
-    it('should render a board', () => {
-        const wrapper = shallow(Board());
-        wrapper.find('.board').should.to.have.length(1);
-    });
-
     it('should render multiple columns', () => {
-        const createCard = sinon.stub();
-        const addVote = sinon.stub();
-        const removeVote = sinon.stub();
-        const deleteCard = sinon.stub();
-        const columns = [
+        const repository = {columns: [
             {title: 'title1', cards: [1]},
-            {title: 'title2', cards: [2]}];
+            {title: 'title2', cards: [2]}]};
 
-        const wrapper = shallow(Board({columns, createCard, addVote, removeVote, deleteCard}));
+        const wrapper = shallow(Board({repository}));
 
-        wrapper.find(Column).get(0).props.should.eql({title: 'title1', cards: [1], createCard, addVote, removeVote, deleteCard});
-        wrapper.find(Column).get(1).props.should.eql({title: 'title2', cards: [2], createCard, addVote, removeVote, deleteCard});
+        wrapper.find(Column).get(0).props.should.eql({column: {title: 'title1', cards: [1]}, repository});
+        wrapper.find(Column).get(1).props.should.eql({column: {title: 'title2', cards: [2]}, repository});
     });
 });

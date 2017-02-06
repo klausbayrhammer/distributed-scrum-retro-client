@@ -21523,13 +21523,11 @@
 
 	var _Board2 = _interopRequireDefault(_Board);
 
-	var _uuidV = __webpack_require__(183);
+	var _Repository = __webpack_require__(183);
 
-	var _uuidV2 = _interopRequireDefault(_uuidV);
+	var _Repository2 = _interopRequireDefault(_Repository);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -21540,63 +21538,26 @@
 	var App = function (_Component) {
 	    _inherits(App, _Component);
 
-	    function App() {
+	    function App(_ref) {
+	        var _ref$repository = _ref.repository,
+	            repository = _ref$repository === undefined ? new _Repository2.default() : _ref$repository;
+
 	        _classCallCheck(this, App);
 
 	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
-	        _this.state = { columns: [{ id: 1, title: "Good", cards: [] }, { id: 2, title: "Bad", cards: [] }, { id: 3, title: "Next actions", cards: [] }] };
+	        _this.state = { repository: repository };
 	        return _this;
 	    }
 
 	    _createClass(App, [{
-	        key: 'createCard',
-	        value: function createCard(_ref) {
-	            var columnId = _ref.columnId,
-	                title = _ref.title;
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
 
-	            console.log((0, _uuidV2.default)());
-	            var card = { title: title, id: (0, _uuidV2.default)(), votes: 0, createdByMe: true };
-	            var columnWithNewlyAddedCard = function columnWithNewlyAddedCard(column) {
-	                return Object.assign({}, column, { cards: [].concat(_toConsumableArray(column.cards), [card]) });
-	            };
-	            var columns = this.state.columns.map(function (column) {
-	                return column.id !== columnId ? column : columnWithNewlyAddedCard(column);
+	            this.state.repository.onChange(function (repository) {
+	                return _this2.setState({ repository: repository });
 	            });
-	            this.setState(Object.assign({}, this.state, { columns: columns }));
-	        }
-	    }, {
-	        key: 'addVote',
-	        value: function addVote(cardIdToVote) {
-	            this.updateVote(cardIdToVote, 1);
-	        }
-	    }, {
-	        key: 'removeVote',
-	        value: function removeVote(cardIdToVote) {
-	            this.updateVote(cardIdToVote, -1);
-	        }
-	    }, {
-	        key: 'updateVote',
-	        value: function updateVote(cardIdToVote, increment) {
-	            var cardWithAddedVote = function cardWithAddedVote(card) {
-	                return Object.assign({}, card, { votes: card.votes + increment });
-	            };
-	            var columns = this.state.columns.map(function (column) {
-	                return Object.assign({}, column, { cards: column.cards.map(function (card) {
-	                        return card.id !== cardIdToVote ? card : cardWithAddedVote(card);
-	                    }) });
-	            });
-	            this.setState(Object.assign({}, this.state, { columns: columns }));
-	        }
-	    }, {
-	        key: 'deleteCard',
-	        value: function deleteCard(cardIdToDelete) {
-	            var columns = this.state.columns.map(function (column) {
-	                return Object.assign({}, column, { cards: column.cards.filter(function (card) {
-	                        return card.id !== cardIdToDelete;
-	                    }) });
-	            });
-	            this.setState(Object.assign({}, this.state, { columns: columns }));
 	        }
 	    }, {
 	        key: 'render',
@@ -21604,7 +21565,7 @@
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'App' },
-	                _react2.default.createElement(_Board2.default, { columns: this.state.columns, createCard: this.createCard.bind(this), deleteCard: this.deleteCard.bind(this), addVote: this.addVote.bind(this), removeVote: this.removeVote.bind(this) })
+	                _react2.default.createElement(_Board2.default, { repository: this.state.repository })
 	            );
 	        }
 	    }]);
@@ -21624,8 +21585,6 @@
 	    value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -21636,20 +21595,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = function () {
-	    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-	        _ref$columns = _ref.columns,
-	        columns = _ref$columns === undefined ? [] : _ref$columns,
-	        createCard = _ref.createCard,
-	        addVote = _ref.addVote,
-	        removeVote = _ref.removeVote,
-	        deleteCard = _ref.deleteCard;
-
+	exports.default = function (_ref) {
+	    var repository = _ref.repository;
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'board' },
-	        columns.map(function (column) {
-	            return _react2.default.createElement(_Column2.default, _extends({}, column, { key: column.title, createCard: createCard, addVote: addVote, removeVote: removeVote, deleteCard: deleteCard }));
+	        repository.columns.map(function (column, index) {
+	            return _react2.default.createElement(_Column2.default, { key: index, column: column, repository: repository });
 	        })
 	    );
 	};
@@ -21664,8 +21616,6 @@
 	    value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -21678,15 +21628,17 @@
 
 	exports.default = function () {
 	    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-	        _ref$cards = _ref.cards,
-	        cards = _ref$cards === undefined ? [] : _ref$cards,
-	        title = _ref.title,
-	        createCard = _ref.createCard,
-	        id = _ref.id,
+	        _ref$column = _ref.column;
+
+	    _ref$column = _ref$column === undefined ? {} : _ref$column;
+	    var title = _ref$column.title,
+	        id = _ref$column.id,
+	        _ref$column$cards = _ref$column.cards,
+	        cards = _ref$column$cards === undefined ? [] : _ref$column$cards,
+	        repository = _ref.repository,
 	        addVote = _ref.addVote,
 	        removeVote = _ref.removeVote,
 	        deleteCard = _ref.deleteCard;
-
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'column' },
@@ -21698,7 +21650,7 @@
 	        _react2.default.createElement(
 	            'button',
 	            { className: 'column__create-card', onClick: function onClick() {
-	                    return createCard({ columnId: id, title: 'sampleTitle' });
+	                    return repository.createCard({ columnId: id, title: 'sampleTitle' });
 	                } },
 	            '+'
 	        ),
@@ -21706,7 +21658,7 @@
 	            'ul',
 	            null,
 	            cards.map(function (card) {
-	                return _react2.default.createElement(_Card2.default, _extends({}, card, { key: card.id, addVote: addVote, removeVote: removeVote, deleteCard: deleteCard }));
+	                return _react2.default.createElement(_Card2.default, { card: card, key: card.id, repository: repository });
 	            })
 	        )
 	    );
@@ -21730,14 +21682,14 @@
 
 	exports.default = function () {
 	    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-	        title = _ref.title,
-	        votes = _ref.votes,
-	        createdByMe = _ref.createdByMe,
-	        id = _ref.id,
-	        deleteCard = _ref.deleteCard,
-	        addVote = _ref.addVote,
-	        removeVote = _ref.removeVote;
+	        _ref$card = _ref.card;
 
+	    _ref$card = _ref$card === undefined ? {} : _ref$card;
+	    var title = _ref$card.title,
+	        votes = _ref$card.votes,
+	        createdByMe = _ref$card.createdByMe,
+	        id = _ref$card.id,
+	        repository = _ref.repository;
 	    return _react2.default.createElement(
 	        "li",
 	        { className: createdByMe ? "card card--created-by-me" : "card" },
@@ -21754,21 +21706,21 @@
 	        _react2.default.createElement(
 	            "button",
 	            { className: "card__delete", onClick: function onClick() {
-	                    return deleteCard(id);
+	                    return repository.deleteCard(id);
 	                } },
 	            "x"
 	        ),
 	        _react2.default.createElement(
 	            "button",
 	            { className: "card__add-vote", onClick: function onClick() {
-	                    return addVote(id);
+	                    return repository.addVote(id);
 	                } },
 	            "+"
 	        ),
 	        _react2.default.createElement(
 	            "button",
 	            { className: "card__remove-vote", onClick: function onClick() {
-	                    return removeVote(id);
+	                    return repository.removeVote(id);
 	                } },
 	            "-"
 	        )
@@ -21777,6 +21729,110 @@
 
 /***/ },
 /* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _uuidV = __webpack_require__(184);
+
+	var _uuidV2 = _interopRequireDefault(_uuidV);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var _class = function () {
+	    function _class() {
+	        _classCallCheck(this, _class);
+
+	        this.columns = [{ id: 1, title: "Good", cards: [] }, { id: 2, title: "Bad", cards: [] }, {
+	            id: 3,
+	            title: "Next actions",
+	            cards: []
+	        }];
+	        this.observer = [];
+	    }
+
+	    _createClass(_class, [{
+	        key: "createCard",
+	        value: function createCard(_ref) {
+	            var columnId = _ref.columnId,
+	                title = _ref.title;
+
+	            var card = { title: title, id: (0, _uuidV2.default)(), votes: 0, createdByMe: true };
+	            var columnWithNewlyAddedCard = function columnWithNewlyAddedCard(column) {
+	                return Object.assign({}, column, { cards: [].concat(_toConsumableArray(column.cards), [card]) });
+	            };
+	            this.columns = this.columns.map(function (column) {
+	                return column.id !== columnId ? column : columnWithNewlyAddedCard(column);
+	            });
+	            this._notify();
+	        }
+	    }, {
+	        key: "addVote",
+	        value: function addVote(cardIdToVote) {
+	            this.updateVote(cardIdToVote, 1);
+	        }
+	    }, {
+	        key: "removeVote",
+	        value: function removeVote(cardIdToVote) {
+	            this.updateVote(cardIdToVote, -1);
+	        }
+	    }, {
+	        key: "updateVote",
+	        value: function updateVote(cardIdToVote, increment) {
+	            var cardWithAddedVote = function cardWithAddedVote(card) {
+	                return Object.assign({}, card, { votes: card.votes + increment });
+	            };
+	            this.columns = this.columns.map(function (column) {
+	                return Object.assign({}, column, { cards: column.cards.map(function (card) {
+	                        return card.id !== cardIdToVote ? card : cardWithAddedVote(card);
+	                    }) });
+	            });
+	            this._notify();
+	        }
+	    }, {
+	        key: "deleteCard",
+	        value: function deleteCard(cardIdToDelete) {
+	            this.columns = this.columns.map(function (column) {
+	                return Object.assign({}, column, { cards: column.cards.filter(function (card) {
+	                        return card.id !== cardIdToDelete;
+	                    }) });
+	            });
+	            this._notify();
+	        }
+	    }, {
+	        key: "onChange",
+	        value: function onChange(obs) {
+	            this.observer.push(obs);
+	        }
+	    }, {
+	        key: "_notify",
+	        value: function _notify() {
+	            var _this = this;
+
+	            this.observer.forEach(function (obs) {
+	                return obs(_this);
+	            });
+	        }
+	    }]);
+
+	    return _class;
+	}();
+
+	exports.default = _class;
+	;
+
+/***/ },
+/* 184 */
 /***/ function(module, exports) {
 
 	
