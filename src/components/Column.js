@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from './Card'
 
-export default ({column: {title, id, cards = []} = {}, repository, addVote, removeVote, deleteCard} = {}) =>
+export default ({column: {title, id, cards = []} = {}, repository} = {}) =>
     <div className="column">
         <h3 className="column__title">{title}</h3>
         <button className="column__create-card" onClick={() => repository.createCard({columnId: id, title: 'sampleTitle'})} >+</button>
