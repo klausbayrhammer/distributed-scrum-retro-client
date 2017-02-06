@@ -11,8 +11,9 @@ export default class {
     }
 
     createCard({columnId, title}) {
-        const card = {title, id: uuid(), votes: 0, createdByMe: true};
-        this.columns.find(column => column.id === columnId).cards.push(card);
+        const column = this.columns.find(column => column.id === columnId);
+        column.cards.push({title, id: uuid(), votes: 0, createdByMe: true});
+        column.createCard = false
         this._notify();
     }
 
@@ -30,6 +31,14 @@ export default class {
                 card.votes += increment;
             }
         }));
+        this._notify();
+    }
+    prepareCreateCard(columnId) {
+        this.columns.find(column => column.id === columnId).createCard = true;
+        this._notify();
+    }
+    undoPrepareCreateCard(columnId) {
+        this.columns.find(column => column.id === columnId).createCard = false;
         this._notify();
     }
 

@@ -21523,7 +21523,7 @@
 
 	var _Board2 = _interopRequireDefault(_Board);
 
-	var _Repository = __webpack_require__(183);
+	var _Repository = __webpack_require__(186);
 
 	var _Repository2 = _interopRequireDefault(_Repository);
 
@@ -21624,6 +21624,10 @@
 
 	var _Card2 = _interopRequireDefault(_Card);
 
+	var _Wrapper = __webpack_require__(183);
+
+	var _Wrapper2 = _interopRequireDefault(_Wrapper);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = function () {
@@ -21633,12 +21637,10 @@
 	    _ref$column = _ref$column === undefined ? {} : _ref$column;
 	    var title = _ref$column.title,
 	        id = _ref$column.id,
+	        createCard = _ref$column.createCard,
 	        _ref$column$cards = _ref$column.cards,
 	        cards = _ref$column$cards === undefined ? [] : _ref$column$cards,
-	        repository = _ref.repository,
-	        addVote = _ref.addVote,
-	        removeVote = _ref.removeVote,
-	        deleteCard = _ref.deleteCard;
+	        repository = _ref.repository;
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'column' },
@@ -21647,13 +21649,7 @@
 	            { className: 'column__title' },
 	            title
 	        ),
-	        _react2.default.createElement(
-	            'button',
-	            { className: 'column__create-card', onClick: function onClick() {
-	                    return repository.createCard({ columnId: id, title: 'sampleTitle' });
-	                } },
-	            '+'
-	        ),
+	        _react2.default.createElement(_Wrapper2.default, { columnId: id, createCard: createCard, repository: repository }),
 	        _react2.default.createElement(
 	            'ul',
 	            null,
@@ -21731,6 +21727,154 @@
 /* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _PrepareCreateCard = __webpack_require__(184);
+
+	var _PrepareCreateCard2 = _interopRequireDefault(_PrepareCreateCard);
+
+	var _CreateCard = __webpack_require__(185);
+
+	var _CreateCard2 = _interopRequireDefault(_CreateCard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var repository = _ref.repository,
+	        columnId = _ref.columnId,
+	        createCard = _ref.createCard;
+
+	    if (createCard) {
+	        return _react2.default.createElement(_CreateCard2.default, { repository: repository, columnId: columnId });
+	    }
+	    return _react2.default.createElement(_PrepareCreateCard2.default, { repository: repository, columnId: columnId });
+	};
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (_ref) {
+	    var repository = _ref.repository,
+	        columnId = _ref.columnId;
+	    return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	            "button",
+	            { className: "create-card__prepare-create-card", onClick: function onClick() {
+	                    return repository.prepareCreateCard(columnId);
+	                } },
+	            "+"
+	        )
+	    );
+	};
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _class = function (_Component) {
+	    _inherits(_class, _Component);
+
+	    function _class(props) {
+	        _classCallCheck(this, _class);
+
+	        var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
+
+	        _this.state = { title: '' };
+	        return _this;
+	    }
+
+	    _createClass(_class, [{
+	        key: 'handleChange',
+	        value: function handleChange(event) {
+	            console.log(event);
+	            this.setState({ title: event.target.value });
+	        }
+	    }, {
+	        key: 'createCard',
+	        value: function createCard() {
+	            var columnId = this.props.columnId;
+	            var title = this.state.title;
+	            this.props.repository.createCard({ columnId: columnId, title: title });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement('input', { type: 'text', className: 'create-card__title', onChange: this.handleChange.bind(this) }),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'create-card__create-card',
+	                        onClick: this.createCard.bind(this) },
+	                    '+'
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'create-card__undo-prepare-create-card',
+	                        onClick: function onClick() {
+	                            return _this2.props.repository.undoPrepareCreateCard(_this2.props.columnId);
+	                        } },
+	                    'x'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return _class;
+	}(_react.Component);
+
+	exports.default = _class;
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -21739,7 +21883,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _uuidV = __webpack_require__(184);
+	var _uuidV = __webpack_require__(187);
 
 	var _uuidV2 = _interopRequireDefault(_uuidV);
 
@@ -21765,10 +21909,11 @@
 	            var columnId = _ref.columnId,
 	                title = _ref.title;
 
-	            var card = { title: title, id: (0, _uuidV2.default)(), votes: 0, createdByMe: true };
-	            this.columns.find(function (column) {
+	            var column = this.columns.find(function (column) {
 	                return column.id === columnId;
-	            }).cards.push(card);
+	            });
+	            column.cards.push({ title: title, id: (0, _uuidV2.default)(), votes: 0, createdByMe: true });
+	            column.createCard = false;
 	            this._notify();
 	        }
 	    }, {
@@ -21791,6 +21936,22 @@
 	                    }
 	                });
 	            });
+	            this._notify();
+	        }
+	    }, {
+	        key: "prepareCreateCard",
+	        value: function prepareCreateCard(columnId) {
+	            this.columns.find(function (column) {
+	                return column.id === columnId;
+	            }).createCard = true;
+	            this._notify();
+	        }
+	    }, {
+	        key: "undoPrepareCreateCard",
+	        value: function undoPrepareCreateCard(columnId) {
+	            this.columns.find(function (column) {
+	                return column.id === columnId;
+	            }).createCard = false;
 	            this._notify();
 	        }
 	    }, {
@@ -21826,7 +21987,7 @@
 	;
 
 /***/ },
-/* 184 */
+/* 187 */
 /***/ function(module, exports) {
 
 	

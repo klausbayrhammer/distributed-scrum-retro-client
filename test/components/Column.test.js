@@ -2,6 +2,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import Card from '../../src/components/Card';
 import Column from '../../src/components/Column';
+import CreateCardWrapper from '../../src/components/CreateCard/Wrapper';
 import chai from 'chai';
 import sinon from 'sinon';
 
@@ -21,10 +22,9 @@ describe('column', () => {
         wrapper.find('.column__title').text().should.equal('column title');
     });
     it('should be possible to create a new card', () => {
-        const createCard = sinon.stub();
-        const wrapper = shallow(Column({column: {id:15}, repository: {createCard}}));
-        wrapper.find('.column__create-card').simulate('click');
-        createCard.should.have.been.calledWith({columnId: 15, title: 'sampleTitle'});
+        const repository = sinon.stub();
+        const wrapper = shallow(Column({column: {id:15, createCard:true}, repository}));
+        wrapper.find(CreateCardWrapper).get(0).props.should.eql({columnId:15, createCard:true, repository})
     });
 
     it('should render multiple cards', () => {

@@ -49,4 +49,33 @@ describe('the repository', function () {
 
         repository.deleteCard(repository.columns[0].cards[0].id);
     });
+
+    it('should set the createCard flag for a column if the prepareCreateCard function is invoked', done => {
+        const repository = new Repository;
+        repository.onChange(newRepo => {
+            newRepo.columns[0].createCard.should.be.true;
+            done();
+        });
+
+        repository.prepareCreateCard(repository.columns[0].id);
+    });
+
+    it('should remove the createCard flag for a column if the undoPrepareCreateCard function is invoked', done => {
+        const repository = new Repository;
+        repository.prepareCreateCard(repository.columns[0].id);
+        repository.onChange(newRepo => {
+            newRepo.columns[0].createCard.should.be.false;
+            done();
+        });
+        repository.undoPrepareCreateCard(repository.columns[0].id);
+    });
+    it('should remove the createCard flag if a card has been created', done => {
+        const repository = new Repository;
+        repository.prepareCreateCard(repository.columns[0].id);
+        repository.onChange(newRepo => {
+            newRepo.columns[0].createCard.should.be.false;
+            done();
+        });
+        repository.createCard({columnId:repository.columns[0].id, title:'title'});
+    });
 });
