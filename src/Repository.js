@@ -9,31 +9,35 @@ export default class {
         }];
         this.observer = [];
     }
+
     createCard({columnId, title}) {
         const card = {title, id: uuid(), votes: 0, createdByMe: true};
-        const columnWithNewlyAddedCard = column => Object.assign({}, column, {cards: [...column.cards, card]});
-        this.columns = this.columns.map(column => column.id !== columnId ? column : columnWithNewlyAddedCard(column));
+        this.columns.find(column => column.id === columnId).cards.push(card);
         this._notify();
     }
+
     addVote(cardIdToVote) {
         this.updateVote(cardIdToVote, 1);
     }
+
     removeVote(cardIdToVote) {
         this.updateVote(cardIdToVote, -1);
     }
+
     updateVote(cardIdToVote, increment) {
-        const cardWithAddedVote = card => Object.assign({}, card, {votes:card.votes + increment});
-        this.columns = this.columns.map(column =>
-            Object.assign({}, column, {cards: column.cards.map(card => card.id !== cardIdToVote ? card : cardWithAddedVote(card))})
-        )
+        this.columns.forEach(column => column.cards.forEach(card => {
+            if (card.id === cardIdToVote) {
+                card.votes += increment;
+            }
+        }));
         this._notify();
     }
+
     deleteCard(cardIdToDelete) {
-        this.columns = this.columns.map(column =>
-            Object.assign({}, column, {cards: column.cards.filter(card => card.id !== cardIdToDelete)})
-        )
+        this.columns.forEach(column => column.cards = column.cards.filter(card => card.id !== cardIdToDelete));
         this._notify();
     }
+
     onChange(obs) {
         this.observer.push(obs);
     }

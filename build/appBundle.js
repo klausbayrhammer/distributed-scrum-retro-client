@@ -21745,8 +21745,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var _class = function () {
@@ -21768,12 +21766,9 @@
 	                title = _ref.title;
 
 	            var card = { title: title, id: (0, _uuidV2.default)(), votes: 0, createdByMe: true };
-	            var columnWithNewlyAddedCard = function columnWithNewlyAddedCard(column) {
-	                return Object.assign({}, column, { cards: [].concat(_toConsumableArray(column.cards), [card]) });
-	            };
-	            this.columns = this.columns.map(function (column) {
-	                return column.id !== columnId ? column : columnWithNewlyAddedCard(column);
-	            });
+	            this.columns.find(function (column) {
+	                return column.id === columnId;
+	            }).cards.push(card);
 	            this._notify();
 	        }
 	    }, {
@@ -21789,23 +21784,22 @@
 	    }, {
 	        key: "updateVote",
 	        value: function updateVote(cardIdToVote, increment) {
-	            var cardWithAddedVote = function cardWithAddedVote(card) {
-	                return Object.assign({}, card, { votes: card.votes + increment });
-	            };
-	            this.columns = this.columns.map(function (column) {
-	                return Object.assign({}, column, { cards: column.cards.map(function (card) {
-	                        return card.id !== cardIdToVote ? card : cardWithAddedVote(card);
-	                    }) });
+	            this.columns.forEach(function (column) {
+	                return column.cards.forEach(function (card) {
+	                    if (card.id === cardIdToVote) {
+	                        card.votes += increment;
+	                    }
+	                });
 	            });
 	            this._notify();
 	        }
 	    }, {
 	        key: "deleteCard",
 	        value: function deleteCard(cardIdToDelete) {
-	            this.columns = this.columns.map(function (column) {
-	                return Object.assign({}, column, { cards: column.cards.filter(function (card) {
-	                        return card.id !== cardIdToDelete;
-	                    }) });
+	            this.columns.forEach(function (column) {
+	                return column.cards = column.cards.filter(function (card) {
+	                    return card.id !== cardIdToDelete;
+	                });
 	            });
 	            this._notify();
 	        }
