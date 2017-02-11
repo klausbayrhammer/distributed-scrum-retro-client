@@ -1,12 +1,16 @@
 import uuid from 'uuid-v4';
 
+function defaultInitialState() {
+    return [
+        {id: 1, title: "Good", cards: []},
+        {id: 2, title: "Bad", cards: []},
+        {id: 3, title: "Next actions", cards: []}
+    ];
+}
+
 export default class {
-    constructor() {
-        this.columns = [{id: 1, title: "Good", cards: []}, {id: 2, title: "Bad", cards: []}, {
-            id: 3,
-            title: "Next actions",
-            cards: []
-        }];
+    constructor(columns = defaultInitialState()) {
+        this.columns = columns;
         this.observer = [];
     }
 
@@ -33,10 +37,12 @@ export default class {
         }));
         this._notify();
     }
+
     prepareCreateCard(columnId) {
         this.columns.find(column => column.id === columnId).createCard = true;
         this._notify();
     }
+
     undoPrepareCreateCard(columnId) {
         this.columns.find(column => column.id === columnId).createCard = false;
         this._notify();

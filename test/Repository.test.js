@@ -4,9 +4,13 @@ import chai from 'chai';
 chai.should();
 
 describe('the repository', function () {
-    it('should have three empty columns as initial state', function () {
+    it('should have three empty columns as default initial state', function () {
         const repository = new Repository;
         repository.columns.should.eql([{id:1, title:"Good", cards:[]}, {id:2, title:"Bad", cards:[]}, {id:3, title:"Next actions", cards:[]}]);
+    });
+    it('should be possible to pass the repository an initialState', function () {
+        const repository = new Repository([{id:1, title:"Good", cards:[]}]);
+        repository.columns.should.eql([{id:1, title:"Good", cards:[]}]);
     });
     it('should add a card when the createCard function is invoked', done => {
         const repository = new Repository;
