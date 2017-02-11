@@ -7,7 +7,6 @@ export default class extends Component {
     }
 
     handleChange(event) {
-        console.log(event);
         this.setState({title: event.target.value});
     }
     createCard() {

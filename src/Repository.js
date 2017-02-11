@@ -17,7 +17,7 @@ export default class {
     createCard({columnId, title}) {
         const column = this.columns.find(column => column.id === columnId);
         column.cards.push({title, id: uuid(), votes: 0, createdByMe: true});
-        column.createCard = false
+        column.createCard = false;
         this._notify();
     }
 

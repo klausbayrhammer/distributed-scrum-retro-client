@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Board from './components/Board';
-import Repository from './Repository';
+import Repository from './FirebaseRepository';
 
 class App extends Component {
-    constructor({repository = new Repository}) {
+    constructor({repository = new Repository({appId: 'test'})}) {
         super();
         this.state = {repository};
     }

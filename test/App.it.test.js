@@ -2,6 +2,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import App from '../src/App';
 import chai from 'chai';
+import Repository from '../src/Repository';
 chai.should();
 
 describe('App', function () {
@@ -9,7 +10,7 @@ describe('App', function () {
         mount(<App/>)
     });
     it('should be able to create a new card', () => {
-        const wrapper = mount(<App/>);
+        const wrapper = mount(<App repository={new Repository}/>);
         wrapper.find('.create-card__prepare-create-card').first().simulate('click');
         wrapper.find('.create-card__title').simulate('change', {target: {value: 'title'}});
         wrapper.find('.create-card__create-card').simulate('click');
@@ -18,7 +19,7 @@ describe('App', function () {
     });
 
     it('should be able to create and vote for a card', () => {
-        const wrapper = mount(<App/>);
+        const wrapper = mount(<App  repository={new Repository}/>);
         wrapper.find('.create-card__prepare-create-card').first().simulate('click');
         wrapper.find('.create-card__title').simulate('change', {target: {value: 'title'}});
         wrapper.find('.create-card__create-card').simulate('click');
