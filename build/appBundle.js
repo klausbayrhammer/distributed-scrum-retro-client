@@ -21923,6 +21923,9 @@
 	        _classCallCheck(this, _class);
 
 	        this.columns = [];
+	        this.createCardForColumn = _lodash2.default.mapValues(initialState, function (value, key) {
+	            return initialState[key].createCard;
+	        });
 	        this.appId = appId;
 	        this._registerOnValueChange(initialState);
 	    }
@@ -21977,8 +21980,11 @@
 	    }, {
 	        key: '_setCreateCard',
 	        value: function _setCreateCard(columnId, value) {
-	            var createCardRef = database.ref(this.appId + '/columns/' + columnId + '/createCard');
-	            createCardRef.set(value);
+	            this.createCardForColumn[columnId] = value;
+	            this.columns.find(function (col) {
+	                return col.id === columnId;
+	            }).createCard = value;
+	            this._notify();
 	        }
 	    }, {
 	        key: '_updateVote',
@@ -22010,6 +22016,8 @@
 	    }, {
 	        key: '_valueChanged',
 	        value: function _valueChanged(columns) {
+	            var _this2 = this;
+
 	            var columnsWithId = Object.keys(columns).map(function (id) {
 	                return Object.assign({ id: id }, columns[id]);
 	            });
@@ -22017,9 +22025,10 @@
 	                return _lodash2.default.omit(col, 'order');
 	            }).value();
 	            this.columns.forEach(function (col) {
-	                return col.cards = Object.keys(col.cards || {}).map(function (id) {
+	                col.cards = Object.keys(col.cards || {}).map(function (id) {
 	                    return Object.assign({ id: id }, col.cards[id]);
 	                });
+	                col.createCard = _this2.createCardForColumn[col.id];
 	            });
 	            this._notify();
 	        }

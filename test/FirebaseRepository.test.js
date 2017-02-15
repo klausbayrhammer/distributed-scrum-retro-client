@@ -1,22 +1,23 @@
 import Repository from '../src/FirebaseRepository';
 import chai from 'chai';
+import uuid from 'uuid-v4';
 
 chai.should();
 
-function initializeRepository(initialState) {
+function initializeRepository(initialState, appId) {
     return new Promise(resolve => {
-        const repository = new Repository({initialState});
+        const repository = new Repository({initialState, appId});
         repository.onChange(resolve);
-    })
+    });
 }
 
 describe('the firebase repository', function () {
     it('should be able to set and fetch the the default initial app state', function (done) {
         const obs = newRepository => {
             newRepository.columns.should.eql([
-                {id: "G", title: "Good", cards: []},
-                {id: "B", title: "Bad", cards: []},
-                {id: "N", title: "Next actions", cards: []}
+                {id: "G", title: "Good", createCard: undefined, cards: []},
+                {id: "B", title: "Bad", createCard: undefined, cards: []},
+                {id: "N", title: "Next actions", createCard: undefined, cards: []}
             ]);
             done();
         };
@@ -28,7 +29,7 @@ describe('the firebase repository', function () {
     it('should be able to set and fetch the the initial app state', function () {
         return initializeRepository({G: {title: "Good"}}).then(repository => {
             repository.columns.should.eql([
-                {id: "G", title: "Good", cards: []},
+                {id: "G", title: "Good", createCard: undefined, cards: []},
             ]);
         });
     });
@@ -77,16 +78,15 @@ describe('the firebase repository', function () {
                 repository.deleteCard("card1");
             });
     });
-    it('should set the createCard flag for a column if the prepareCreateCard function is invoked', done => {
-        initializeRepository({G: {title: "Good"}})
-            .then(repository => {
+    it('should set the createCard flag for a column if the prepareCreateCard function is invoked', () => {
+        return initializeRepository({G: {title: "Good"}})
+            .then(repository => new Promise(resolve => {
                 repository.onChange(() => {
                     repository.columns[0].createCard.should.be.true;
-                    done();
+                    resolve();
                 });
-
                 repository.prepareCreateCard("G");
-            });
+            }));
     });
     it('should remove the createCard flag for a column if the undoPrepareCreateCard function is invoked', done => {
         initializeRepository({G: {title: "Good", createCard: true}})
@@ -110,5 +110,17 @@ describe('the firebase repository', function () {
                 });
                 repository.createCard({columnId: "G", title: "title"});
             });
+    });
+    it('it should not sync the createCard flag across multiple clients', () => {
+        const appId = uuid();
+        const initialState = {G: {title: "Good", createCard: true}};
+        return Promise.all([initializeRepository(initialState, appId), initializeRepository(initialState, appId)])
+            .then(([firstRepo, secondRepo]) => new Promise(resolve => {
+                secondRepo.onChange(() => {
+                    secondRepo.columns[0].createCard.should.be.true;
+                    resolve();
+                });
+                firstRepo.createCard({title: "title", columnId: "G"});
+            }));
     });
 });

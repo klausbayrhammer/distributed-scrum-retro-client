@@ -19,6 +19,7 @@ function defaultInitialState() {
 export default class {
     constructor({initialState = defaultInitialState(), appId = uuid()} = {}) {
         this.columns = [];
+        this.createCardForColumn = _.mapValues(initialState, (value, key) => initialState[key].createCard);
         this.appId = appId;
         this._registerOnValueChange(initialState);
     }
@@ -58,8 +59,9 @@ export default class {
     }
 
     _setCreateCard(columnId, value) {
-        const createCardRef = database.ref(`${this.appId}/columns/${columnId}/createCard`);
-        createCardRef.set(value);
+        this.createCardForColumn[columnId] = value;
+        this.columns.find(col => col.id === columnId).createCard = value;
+        this._notify();
     }
 
     _updateVote(cardId, increment) {
@@ -87,7 +89,10 @@ export default class {
             .sortBy('order')
             .map(col => _.omit(col, 'order'))
             .value();
-        this.columns.forEach(col => col.cards = Object.keys(col.cards || {}).map(id => Object.assign({id}, col.cards[id])))
+        this.columns.forEach(col => {
+            col.cards = Object.keys(col.cards || {}).map(id => Object.assign({id}, col.cards[id]));
+            col.createCard = this.createCardForColumn[col.id];
+        });
         this._notify();
     }
 
