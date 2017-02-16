@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import uuid from 'uuid-v4';
 import _ from 'lodash';
+import userId from './repository/user-id';
 
 const config = {
     databaseURL: "https://distributed-scrum-retro.firebaseio.com/"
@@ -21,6 +22,7 @@ export default class {
         this.columns = [];
         this.createCardForColumn = _.mapValues(initialState, (value, key) => initialState[key].createCard);
         this.appId = appId;
+        this.userId = userId();
         this._registerOnValueChange(initialState);
     }
 
@@ -32,7 +34,7 @@ export default class {
     createCard({columnId, title}) {
         const newCardId = uuid();
         const cardRef = database.ref(`${this.appId}/columns/${columnId}/cards/${newCardId}`);
-        cardRef.set({title, votes: 0});
+        cardRef.set({title, votes: 0, userId:this.userId});
         this.undoPrepareCreateCard(columnId);
     }
 
@@ -90,7 +92,9 @@ export default class {
             .map(col => _.omit(col, 'order'))
             .value();
         this.columns.forEach(col => {
-            col.cards = Object.keys(col.cards || {}).map(id => Object.assign({id}, col.cards[id]));
+            col.cards = Object.keys(col.cards || {})
+                .map(id => Object.assign({id}, col.cards[id]))
+                .map(card => Object.assign(card, {createdByMe: card.userId === this.userId}));
             col.createCard = this.createCardForColumn[col.id];
         });
         this._notify();

@@ -38,7 +38,7 @@ describe('the firebase repository', function () {
         return initializeRepository({G: {title: "Good"}}).then(repository => {
             return new Promise(resolve => {
                 repository.onChange(newRepository => {
-                    newRepository.columns[0].cards[0].should.contain({title: 'title', votes: 0});
+                    newRepository.columns[0].cards[0].should.contain({title: 'title', votes: 0, createdByMe:true});
                     resolve();
                 });
                 repository.createCard({title: "title", columnId: "G"});

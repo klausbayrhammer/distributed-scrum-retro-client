@@ -14,7 +14,7 @@ yarn test
 ```
 TODOS:
 - [x] Don't Sync createCard flag
+- [x] Created By me distinction
 - [ ] Merge cards
 - [ ] DnD of cards see http://react-dnd.github.io/react-dnd/
-- [ ] Created By me distinction
 - [ ] App ID Based on URL
