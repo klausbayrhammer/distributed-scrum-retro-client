@@ -1,7 +1,17 @@
 # Basic UI for distributed scrum retro
 
-Use npm scripts to build/test/run the ui
+## Getting started
 
+```
+git clone https://github.com/klausbayrhammer/distributed-scrum-retro-client .
+yarn
+yarn webpack
+open public/index.html
+```
+## Run tests
+```
+yarn test
+```
 TODOS:
 - [x] Don't Sync createCard flag
 - [ ] Merge cards
