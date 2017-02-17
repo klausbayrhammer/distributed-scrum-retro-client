@@ -4,8 +4,6 @@ chai.should();
 
 describe('userid', function () {
     it('should fetch the userId if already set', function () {
-        global.document.cookie.should.be.empty;
-
         const actualUserId = userId();
 
         actualUserId.should.not.be.empty;
