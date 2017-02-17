@@ -32,7 +32,7 @@
   },
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive ./test",
-    "start": "webpack-dev-server --port 3000 --host 0.0.0.0",
+    "start": "webpack-dev-server --hot --inline --port 3000 --host 0.0.0.0",
     "webpack": "webpack --watch"
   }
 }
