@@ -1,4 +1,4 @@
-import Repository from '../src/FirebaseRepository';
+import Repository from '../../src/repository/Repository';
 import chai from 'chai';
 import uuid from 'uuid-v4';
 
