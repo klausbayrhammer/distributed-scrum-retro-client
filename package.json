@@ -11,6 +11,12 @@
     "chai": "^3.5.0",
     "css-loader": "^0.26.1",
     "enzyme": "^2.7.1",
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-mocha": "^4.8.0",
+    "eslint-plugin-react": "^6.10.0",
     "jsdom": "^9.9.1",
     "mocha": "^3.2.0",
     "mockery": "^2.0.0",
@@ -26,11 +32,13 @@
   "dependencies": {
     "cookie": "^0.3.1",
     "firebase": "^3.6.9",
+    "lodash": "^4.17.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "uuid-v4": "^0.1.0"
   },
   "scripts": {
+    "lint": "eslint src/** test/**",
     "test": "mocha --compilers js:babel-core/register --require ./test/setup.js --recursive ./test",
     "start": "webpack-dev-server --hot --inline --port 3000 --host 0.0.0.0",
     "webpack": "webpack --watch"
