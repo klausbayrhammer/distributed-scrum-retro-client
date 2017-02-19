@@ -2,16 +2,16 @@ import _ from 'lodash';
 
 export default function ({ userId, createCardForColumn, remoteColumns }) {
   const columnsWithId = Object.keys(remoteColumns)
-    .map(id => Object.assign({ id }, remoteColumns[id]));
+    .map(id => ({ ...remoteColumns[id], id }));
   return _.chain(columnsWithId)
     .sortBy('order')
     .map(col => _.omit(col, 'order'))
+    .map(col => ({ ...col, createCard: createCardForColumn[col.id] }))
     .map((col) => {
       const cards = Object.keys(col.cards || {})
-        .map(id => Object.assign({ id }, col.cards[id]))
-        .map(card => Object.assign({ createdByMe: card.userId === userId }, card));
-      const createCard = createCardForColumn[col.id];
-      return Object.assign({}, col, { cards, createCard });
+        .map(id => ({ ...col.cards[id], id }))
+        .map(card => ({ ...card, createdByMe: card.userId === userId }));
+      return { ...col, cards };
     })
     .value();
 }
