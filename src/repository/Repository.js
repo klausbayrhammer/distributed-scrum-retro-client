@@ -6,6 +6,7 @@ import database from './database';
 import deleteCard from './delete-card';
 import createCard from './create-card';
 import updateVote from './update-vote';
+import editCardTitle from './edit-card-title';
 
 function defaultInitialState() {
   return {
@@ -21,11 +22,7 @@ export default class {
     this.createCardForColumn = _.mapValues(initialState, (v, k) => initialState[k].createCard);
     const userId = getUserId();
 
-    const notify = () => {
-      if (this.observer) {
-        this.observer(this);
-      }
-    };
+    const notify = () => this.observer && this.observer(this);
 
     const getOpts = () => {
       const remoteColumns = this.remoteColumns;
@@ -37,19 +34,6 @@ export default class {
     const rebuildColumns = () => {
       this.columns = transformRemoteColumns(getOpts());
       notify();
-    };
-
-    const setCreateCard = (columnId, value) => {
-      this.createCardForColumn[columnId] = value;
-      rebuildColumns();
-    };
-
-    this.prepareCreateCard = (columnId) => {
-      setCreateCard(columnId, true);
-    };
-
-    this.undoPrepareCreateCard = (columnId) => {
-      setCreateCard(columnId, false);
     };
 
     const registerOnValueChange = () => {
@@ -64,9 +48,14 @@ export default class {
       });
     };
 
-    this.onChange = (obs) => {
-      this.observer = obs;
+    const setCreateCard = (columnId, value) => {
+      this.createCardForColumn[columnId] = value;
+      rebuildColumns();
     };
+
+    this.prepareCreateCard = columnId => setCreateCard(columnId, true);
+
+    this.undoPrepareCreateCard = columnId => setCreateCard(columnId, false);
 
     this.createCard = ({ columnId, title }) => {
       createCard({ columnId, title }, getOpts());
@@ -78,6 +67,10 @@ export default class {
     this.removeVote = cardId => updateVote(cardId, -1, getOpts());
 
     this.deleteCard = cardId => deleteCard(cardId, getOpts());
+
+    this.editCardTitle = (cardId, newTitle) => editCardTitle({ cardId, newTitle }, getOpts());
+
+    this.onChange = (obs) => { this.observer = obs; };
 
     registerOnValueChange();
   }

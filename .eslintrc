@@ -6,6 +6,7 @@
       "never"
     ],
     "no-unused-expressions": 0,
+    "space-before-function-paren": 0, // doesn't work properly with webstorm
     "react/jsx-filename-extension": 0,
     "react/forbid-prop-types": 0,
     "react/prop-types": 0,
