@@ -17,13 +17,14 @@ describe('App', () => {
   it('renders without crashing', () => {
     mount(<App />);
   });
-  it('should be able to display cards', () => initializeRepository({
-    G: {
-      title: 'Good',
-      cards: { card1: { title: 'title', votes: 0 } },
-    },
-  }).then((repository) => {
+  it('should be able to display cards', async () => {
+    const repository = await initializeRepository({
+      G: {
+        title: 'Good',
+        cards: { card1: { title: 'title', votes: 0 } },
+      },
+    });
     const wrapper = mount(<App repository={repository} />);
     wrapper.find('.card__title').text().should.equal('title');
-  }));
+  });
 });
