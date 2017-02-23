@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Board from './components/Board';
 import Repository from './repository/Repository';
-import '../style/index.styl';
 
 class App extends Component {
   constructor({ repository = new Repository({ appId: 'test' }) }) {
