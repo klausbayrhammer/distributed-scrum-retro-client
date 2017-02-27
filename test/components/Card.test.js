@@ -4,14 +4,16 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import Card from '../../src/components/Card';
+import EditCardTitleWrapper from '../../src/components/EditCardTitle/';
 
 chai.should();
 chai.use(sinonChai);
 
 describe('the card', () => {
-  it('should render the title of a card', () => {
-    const wrapper = shallow(Card({ card: { title: 'title' } }));
-    wrapper.find('.card__title').text().should.equal('title');
+  it('should render the EditCardTitle component correctly', () => {
+    const repository = sinon.stub();
+    const wrapper = shallow(Card({ card: { title: 'title', id: 5, editCard: true }, repository }));
+    wrapper.find(EditCardTitleWrapper).props().should.eql({ cardId: 5, title: 'title', editCard: true, repository });
   });
 
   it('should render the votecount of a card', () => {

@@ -1,10 +1,9 @@
 import React from 'react';
+import EditCardTitle from './EditCardTitle';
 
-export default ({ card: { title, votes, createdByMe, id } = {}, repository } = {}) =>
+export default ({ card: { title, votes, createdByMe, id, editCard } = {}, repository } = {}) =>
   <div className={createdByMe ? 'card card--created-by-me' : 'card'}>
-    <div className="card__title">
-      {title}
-    </div>
+    <EditCardTitle title={title} cardId={id} editCard={editCard} repository={repository} />
     <div className="card__votes">
       {votes}
     </div>

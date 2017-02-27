@@ -149,9 +149,11 @@ describe('the firebase repository', () => {
         cards: { card1: { title: 'title', votes: 0 } },
       },
     });
+    repository.editCard('card1');
     await new Promise((resolve) => {
       repository.onChange(() => {
         repository.columns[0].cards[0].title.should.equal('newTitle');
+        repository.columns[0].cards[0].editCard.should.be.false;
         resolve();
       });
       repository.editCardTitle('card1', 'newTitle');
