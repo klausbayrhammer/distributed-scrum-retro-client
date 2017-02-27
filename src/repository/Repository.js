@@ -19,6 +19,7 @@ function defaultInitialState() {
 export default class {
   constructor({ initialState = defaultInitialState(), appId = uuid() } = {}) {
     this.columns = [];
+    this.editCard = [];
     this.createCardForColumn = _.mapValues(initialState, (v, k) => initialState[k].createCard);
     const userId = getUserId();
 
@@ -28,7 +29,8 @@ export default class {
       const remoteColumns = this.remoteColumns;
       const columns = this.columns;
       const createCardForColumn = this.createCardForColumn;
-      return { columns, appId, userId, createCardForColumn, remoteColumns };
+      const editCard = this.editCard;
+      return { columns, appId, userId, createCardForColumn, remoteColumns, editCard };
     };
 
     const rebuildColumns = () => {
@@ -53,6 +55,11 @@ export default class {
       rebuildColumns();
     };
 
+    const setEditCard = (cardId, value) => {
+      this.editCard[cardId] = value;
+      rebuildColumns();
+    };
+
     this.prepareCreateCard = columnId => setCreateCard(columnId, true);
 
     this.undoPrepareCreateCard = columnId => setCreateCard(columnId, false);
@@ -69,6 +76,10 @@ export default class {
     this.deleteCard = cardId => deleteCard(cardId, getOpts());
 
     this.editCardTitle = (cardId, newTitle) => editCardTitle({ cardId, newTitle }, getOpts());
+
+    this.editCard = cardId => setEditCard(cardId, true);
+
+    this.undoEditCard = cardId => setEditCard(cardId, false);
 
     this.onChange = (obs) => { this.observer = obs; };
 

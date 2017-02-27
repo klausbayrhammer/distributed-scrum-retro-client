@@ -157,4 +157,37 @@ describe('the firebase repository', () => {
       repository.editCardTitle('card1', 'newTitle');
     });
   });
+
+  it('should set the editCard flag locally if editCard is invoked', async() => {
+    const repository = await initializeRepository({
+      G: {
+        title: 'Good',
+        cards: { card1: { title: 'title', votes: 0 } },
+      },
+    });
+    await new Promise((resolve) => {
+      repository.onChange(() => {
+        repository.columns[0].cards[0].editCard.should.be.true;
+        resolve();
+      });
+      repository.editCard('card1');
+    });
+  });
+
+  it('should remove the editCard flag locally if undoEditCard is invoked', async() => {
+    const repository = await initializeRepository({
+      G: {
+        title: 'Good',
+        cards: { card1: { title: 'title', votes: 0 } },
+      },
+    });
+    repository.editCard('card1');
+    await new Promise((resolve) => {
+      repository.onChange(() => {
+        repository.columns[0].cards[0].editCard.should.not.be.true;
+        resolve();
+      });
+      repository.undoEditCard('card1');
+    });
+  });
 });

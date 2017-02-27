@@ -11,7 +11,11 @@ function mapCreateCard(col, createCardForColumn) {
   return ({ ...col, createCard: createCardForColumn[col.id] });
 }
 
-export default function ({ userId, createCardForColumn, remoteColumns }) {
+function mapEditCard(col, editCard) {
+  return ({ ...col, cards: col.cards.map(card => ({ ...card, editCard: editCard[card.id] })) })
+}
+
+export default function ({ userId, createCardForColumn = [], editCard = [], remoteColumns }) {
   return _.chain(remoteColumns)
     .keys()
     .map(id => ({ ...remoteColumns[id], id }))
@@ -19,5 +23,6 @@ export default function ({ userId, createCardForColumn, remoteColumns }) {
     .map(col => _.omit(col, 'order'))
     .map(col => mapCreateCard(col, createCardForColumn))
     .map(col => mapCards(col, userId))
+    .map(col => mapEditCard(col, editCard))
     .value();
 }
