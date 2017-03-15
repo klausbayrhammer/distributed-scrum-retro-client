@@ -1,0 +1,23 @@
+.button
+  cursor pointer
+  transition background-color 0.3s animationCurve
+
+  &--clean
+    border none
+    background none
+    padding 0
+    fill darkGrey
+    &:hover
+      fill coolGrey
+
+  &--circular
+    border none
+    border-radius 50%
+    width 50px
+    height 50px
+    box-shadow 0 2px 2px 0 rgba(black,0.14),0 1px 5px 0 rgba(black,0.12),0 3px 1px -2px rgba(black,0.2)
+    fill white
+    background-color trueBlue
+
+    &:hover
+      background-color rgba(trueBlue,0.7)

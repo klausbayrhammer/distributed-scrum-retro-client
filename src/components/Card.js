@@ -7,7 +7,15 @@ export default ({ card: { title, votes, createdByMe, id, editCard } = {}, reposi
     <div className="card__votes">
       {votes}
     </div>
-    <button className="card__delete" onClick={() => repository.deleteCard(id)}>x</button>
-    <button className="card__add-vote" onClick={() => repository.addVote(id)}>+</button>
-    <button className="card__remove-vote" onClick={() => repository.removeVote(id)}>-</button>
+    <button className="button card__delete" onClick={() => repository.deleteCard(id)}>x</button>
+    <button className="button button--clean" onClick={() => repository.addVote(id)}>
+        <svg width="24px" height="24px">
+            <use xlinkHref="#thumbs-up"></use>
+        </svg>
+    </button>
+    <button className="button button--clean" onClick={() => repository.removeVote(id)}>
+        <svg width="24px" height="24px">
+            <use xlinkHref="#thumbs-down"></use>
+        </svg>
+    </button>
   </div>;
