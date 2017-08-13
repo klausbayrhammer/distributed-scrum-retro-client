@@ -19,18 +19,18 @@ export default class extends Component {
   }
 
   render() {
-    return (<div>
-      <input type="text" className="create-card__title" onChange={this.handleChange} />
-      <button
-        className="create-card__create-card"
-        onClick={this.createCard}
-      >+
-      </button>
-      <button
-        className="create-card__undo-prepare-create-card"
-        onClick={() => this.props.repository.undoPrepareCreateCard(this.props.columnId)}
-      >x
-      </button>
-    </div>);
+    return (<form onSubmit={this.createCard}>
+        <input type="text" className="create-card__title" onChange={this.handleChange} />
+        <button type="submit"
+          className="create-card__create-card"
+          onClick={this.createCard}
+        >+
+        </button>
+        <button
+          className="create-card__undo-prepare-create-card"
+          onClick={() => this.props.repository.undoPrepareCreateCard(this.props.columnId)}
+        >x
+        </button>
+      </form>);
   }
 }
